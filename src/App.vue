@@ -38,6 +38,15 @@ onMounted(() => {
   }, 1000)
 })
 
+const outline = ref(false)
+
+// 停用
+// onMounted(() => {
+//   setInterval(() => {
+//     outline.value = !outline.value
+//   }, 5000)
+// })
+
 const scale = ref(0)
 
 function resizeCoverDiv() {
@@ -100,11 +109,11 @@ const grid = false;
 </script>
 
 <template>
+  <div class="ani-bg" />
   <div
     class="wrapper"
     :class="{ 'show-grid': grid }"
     :style="`transform: translate(-50%) scale(${scale})`">
-    <div class="ani-bg" />
 
     <div
       v-if="grid"
@@ -115,7 +124,7 @@ const grid = false;
     <div
       v-for="i in 2"
       class="text-container"
-      :class="`text-container-${i}`">
+      :class="`text-container-${i} ${outline ? 'outline' : ''}`">
       <typing class="t1 tr f120">津波<br>襲<br>来</typing>
       <typing class="t2 f120">覚<br>醒</typing>
       <typing class="t3 tr f120">時に、西<br>暦</typing>
@@ -168,7 +177,7 @@ const grid = false;
     </div>
     <div v-else>
       <div class="t3">
-        大災難<br>
+        <div>大災難</div>
         発生した…か？
       </div>
     </div>
