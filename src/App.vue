@@ -75,9 +75,9 @@ function pauseAudio() {
 function setMediaSession() {
   if ('mediaSession' in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: 'Final Horizon',
-      artist: '私が見た未来｜カウントダウン',
-      album: '私が見た未来｜カウントダウン',
+      title: 'Nicolas MF Cage',
+      artist: 'Ezra Lipp',
+      album: 'YouTube Music',
       artwork: [
         {
           src: 'https://static.boggy.tw/watashigamitamirai/cover.jpg',
@@ -185,7 +185,7 @@ const grid = false;
 
   <audio
     ref="audio"
-    src="https://static.boggy.tw/watashigamitamirai/final_horizon.mp3"
+    src="https://static.boggy.tw/watashigamitamirai/nicolas_mf_cage-ezra_lipp.mp3"
     loop
     @pause="pauseAudio" />
 </template>
