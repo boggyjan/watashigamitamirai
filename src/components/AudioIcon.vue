@@ -24,7 +24,7 @@ defineProps({
   width: 28px;
   height: 28px;
   vertical-align: middle;
-  background-image: url('./wave.svg');
+  background-image: url('wave.svg');
   background-position: 0 0;
   background-size: contain;
 
