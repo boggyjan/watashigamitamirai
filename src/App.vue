@@ -191,5 +191,5 @@ const grid = false;
 </template>
 
 <style lang="scss">
-@import '@/assets/app.scss';
+@use '@/assets/app.scss';
 </style>
