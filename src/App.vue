@@ -4,7 +4,8 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 
-import Typing from './components/Typing.vue'
+import Typing from './components/Typing'
+import AudioIcon from './components/AudioIcon'
 import { ref, onMounted } from 'vue'
 
 dayjs.extend(utc)
@@ -48,6 +49,53 @@ function resizeCoverDiv() {
 window.addEventListener('resize', resizeCoverDiv)
 resizeCoverDiv()
 
+// Audio
+const audio = ref()
+const audioPaused = ref(true)
+
+function handleAudioSwitch() {
+  if (audio.value.paused) {
+    playAudio()
+  } else {
+    pauseAudio()
+  }
+}
+
+function playAudio() {
+  audio.value.play()
+  audioPaused.value = false
+  setMediaSession()
+}
+
+function pauseAudio() {
+  audio.value.pause()
+  audioPaused.value = true
+}
+
+function setMediaSession() {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: 'Final Horizon',
+      artist: '私が見た未来｜カウントダウン',
+      album: '私が見た未来｜カウントダウン',
+      artwork: [
+        {
+          src: 'https://static.boggy.tw/watashigamitamirai/cover.jpg',
+          sizes: '512x512',
+          type: 'image/jpeg',
+        }
+      ]
+    })
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      playAudio();
+    })
+    navigator.mediaSession.setActionHandler('pause', () => {
+      pauseAudio();
+    })
+  }
+}
+
 const grid = false;
 </script>
 
@@ -56,10 +104,12 @@ const grid = false;
     class="wrapper"
     :class="{ 'show-grid': grid }"
     :style="`transform: translate(-50%) scale(${scale})`">
+    <div class="ani-bg" />
+
     <div
       v-if="grid"
       class="grid">
-      <div v-for="i in 1200"></div>
+      <div v-for="i in 1200" />
     </div>
 
     <div
@@ -119,12 +169,27 @@ const grid = false;
     <div v-else>
       <div class="t3">
         大災難<br>
-        発生した。
+        発生した…か？
       </div>
     </div>
   </div>
+
+  <div class="audio-switch-btn">
+    <div
+      class="icon"
+      @click="handleAudioSwitch">
+      SOUND {{ audioPaused ? 'OFF' : 'ON' }}
+      <AudioIcon :isPlaying="!audioPaused" />
+    </div>
+  </div>
+
+  <audio
+    ref="audio"
+    src="https://static.boggy.tw/watashigamitamirai/final_horizon.mp3"
+    loop
+    @pause="pauseAudio" />
 </template>
 
 <style lang="scss">
-@import '@/assets/app.css';
+@import '@/assets/app.scss';
 </style>

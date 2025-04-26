@@ -1,5 +1,7 @@
 :root {
   --red: #ff007b;
+  // --dark-red: #f00070;
+  --dark-red: #c00050;
 }
 
 html {
@@ -11,6 +13,7 @@ html {
   font-weight: 600;
   font-size: 28px;
   line-height: 1;
+  overflow: hidden;
   /*background-image: radial-gradient(#000c, #000f), url(./bg2.png);
   background-size: cover;*/
 
@@ -313,6 +316,43 @@ body {
   }      
 }
 
+.ani-bg {
+  position: absolute;
+  left: 100%;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--dark-red);
+  animation: 30s ani-bg infinite;
+}
+
+@keyframes ani-bg {
+  0%{
+    left: 100%;
+    right: 0;
+  }
+  47% {
+    left: 100%;
+    right: 0;
+  }
+  48% {
+    left: 0;
+    right: 0;
+  }
+  50% {
+    left: 0;
+    right: 0;
+  }
+  51% {
+    left: 0;
+    right: 100%;
+  }
+  100% {
+    left: 0;
+    right: 100%;
+  }
+}
+
 .countdown-container {
   position: absolute;
   left: 0;
@@ -323,7 +363,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: clamp(10px, 3vw, 26px);
+  font-size: clamp(20px, 3vw, 26px);
   opacity: 0;
   animation: 2s 2s fadein forwards;
   /* text-shadow: 0 0 1px #000, 0 0 20px #000, 0 0 20px #000; */
@@ -333,6 +373,11 @@ body {
     background: #0006;
   }*/
 
+  @media (orientation: portrait) {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+  }
+
   .t1 {
     font-size: 1.8em;
   }
@@ -341,12 +386,26 @@ body {
     font-size: 2.2em;
     text-shadow: 0 0 1px #000, 0 0 20px #000, 0 0 20px #000; 
 
+    @media (orientation: portrait) {
+      display: flex;
+      align-items: flex-end;
+    }
+
     span {
       display: inline-block;
       width: 1em;
       font-size: 2em;
       text-align: center;
       border-bottom: 3px solid #ff007b;
+      writing-mode: initial;
+      text-orientation: initial;
+
+      @media (orientation: portrait) {
+        margin-top: 0.2em;
+        height: 0.8em;
+        border-right: 3px solid #ff007b;
+        border-bottom: 0;
+      }
     }
   }
 
@@ -359,4 +418,20 @@ body {
   to {
     opacity: 1;
   }      
+}
+
+.audio-switch-btn {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: bold;
+  transition: transform 0.4s, filter 0.4s;
+
+  &:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px #f99) drop-shadow(0 0 10px #f33);
+  }
 }
