@@ -382,7 +382,12 @@ body {
   }
 
   .t1 {
+    margin: 1rem 0;
     font-size: 1.8em;
+
+    @media (orientation: portrait) {
+      margin: 0 1rem;
+    }
   }
 
   .t2 {

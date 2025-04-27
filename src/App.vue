@@ -7,6 +7,7 @@ import duration from 'dayjs/plugin/duration'
 import Typing from './components/Typing'
 import AudioIcon from './components/AudioIcon'
 import { ref, onMounted } from 'vue'
+import audioData from './constants/audioData'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -38,15 +39,6 @@ onMounted(() => {
   }, 1000)
 })
 
-const outline = ref(false)
-
-// 停用
-// onMounted(() => {
-//   setInterval(() => {
-//     outline.value = !outline.value
-//   }, 5000)
-// })
-
 const scale = ref(0)
 
 function resizeCoverDiv() {
@@ -60,6 +52,7 @@ resizeCoverDiv()
 
 // Audio
 const audio = ref()
+const audioItem = audioData[Math.floor(audioData.length * Math.random())]
 const audioPaused = ref(true)
 
 function handleAudioSwitch() {
@@ -73,7 +66,6 @@ function handleAudioSwitch() {
 function playAudio() {
   audio.value.play()
   audioPaused.value = false
-  setMediaSession()
 }
 
 function pauseAudio() {
@@ -83,18 +75,7 @@ function pauseAudio() {
 
 function setMediaSession() {
   if ('mediaSession' in navigator) {
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: 'Nicolas MF Cage',
-      artist: 'Ezra Lipp',
-      album: 'YouTube Music',
-      artwork: [
-        {
-          src: 'https://static.boggy.tw/watashigamitamirai/cover.jpg',
-          sizes: '512x512',
-          type: 'image/jpeg',
-        }
-      ]
-    })
+    navigator.mediaSession.metadata = new MediaMetadata(audioItem.metadata)
 
     navigator.mediaSession.setActionHandler('play', () => {
       playAudio();
@@ -105,7 +86,19 @@ function setMediaSession() {
   }
 }
 
+onMounted(() => {
+  setMediaSession()
+})
+
 const grid = false;
+const outline = ref(false)
+
+// 停用匡線字功能
+// onMounted(() => {
+//   setInterval(() => {
+//     outline.value = !outline.value
+//   }, 5000)
+// })
 </script>
 
 <template>
@@ -176,10 +169,9 @@ const grid = false;
       </div>
     </div>
     <div v-else>
-      <div class="t3">
-        <div>大災難</div>
-        発生した…か？
-      </div>
+      <div class="t3">大災難</div>
+      <div class="t3">発生した…か？</div>
+      <div class="t1">…笑えば…いいと思うよ</div>
     </div>
   </div>
 
@@ -187,15 +179,15 @@ const grid = false;
     <div
       class="icon"
       @click="handleAudioSwitch">
-      SOUND {{ audioPaused ? 'OFF' : 'ON' }}
+      {{ audioItem.metadata.title }} / Sound {{ audioPaused ? 'Off' : 'On' }}
       <AudioIcon :isPlaying="!audioPaused" />
     </div>
   </div>
 
   <audio
     ref="audio"
-    src="https://static.boggy.tw/watashigamitamirai/nicolas_mf_cage-ezra_lipp.mp3"
     loop
+    :src="audioItem.path"
     @pause="pauseAudio" />
 </template>
 
