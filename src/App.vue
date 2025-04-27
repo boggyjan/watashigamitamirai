@@ -171,7 +171,7 @@ const outline = ref(false)
     <div v-else>
       <div class="t3">大災難</div>
       <div class="t3">発生した…か？</div>
-      <div class="t1">…笑えば…いいと思うよ</div>
+      <div class="t1 mv-1">…笑えば…いいと思うよ</div>
     </div>
   </div>
 
