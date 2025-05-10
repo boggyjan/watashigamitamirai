@@ -31,8 +31,8 @@ onTick((delta) => {
 
 // countdown text begin
 const timeDiff = ref({})
-const pixiWidth = 3000
-const pixiHeight = 1400
+const pixiWidth = 1500
+const pixiHeight = 700
 
 function updateTimeDiff() {
   const endDate = dayjs.tz('2025-07-05 04:18:00', 'Asia/Tokyo').tz(dayjs.tz.guess())
@@ -105,7 +105,7 @@ useFilters()
 const noiseSeed = ref(1)
 
 // Shockwave Effects
-const shockwaveCenter = ref([pixiWidth / 4, pixiHeight / 4])
+const shockwaveCenter = ref([pixiWidth / 2, pixiHeight / 2])
 const shockwaveTime = ref(2)
 const shockwaveOpts = ref({
   radius: -1,
@@ -131,7 +131,7 @@ onMounted(() => {
   })
 })
 
-const clickShockwaveCenter = ref([pixiWidth / 4, pixiHeight / 4])
+const clickShockwaveCenter = ref([pixiWidth / 2, pixiHeight / 2])
 const clickShockwaveTime = ref(2)
 const clickShockwaveOpts = ref({
   radius: 500,
@@ -237,7 +237,7 @@ onMounted(() => {
     class="pixi-app"
     :width="pixiWidth"
     :height="pixiHeight"
-    :resolution="2">
+    :resolution="1">
     <Container>
       <Container
         v-for="i in 2"
@@ -255,8 +255,8 @@ onMounted(() => {
           :font-size="item.fontSize" />
       </Container>
       <!-- filters begin -->
-      <!-- <BlurFilter
-        :blur="1" /> -->
+      <BlurFilter
+        :blur="1" />
       <ShockwaveFilter
         :center="shockwaveCenter"
         :options="shockwaveOpts"
