@@ -100,5 +100,5 @@ function handleClick() {
     :style="style"
     :visible="visible"
     eventMode="static"
-    @click="handleClick" />
+    @pointerdown="handleClick" />
 </template>
