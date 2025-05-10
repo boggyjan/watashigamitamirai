@@ -60,6 +60,7 @@ onMounted(() => {
 
 // countdown text end
 
+// ============= Filters =============
 function useFilters() {
   const shockwaveFilterConfig = {
     name: 'ShockwaveFilter',
@@ -100,7 +101,6 @@ function useFilters() {
 
 useFilters()
 
-// ============= Filters =============
 // Noise Filters
 const noiseSeed = ref(1)
 
@@ -201,7 +201,7 @@ const glitchInitOpts = {
 
 function glitchEffectLoop() {
   setTimeout(() => {
-    glitchInitOpts.filterIns.slices = 80
+    glitchInitOpts.filterIns.slices = 200
 
     setTimeout(() => {
       glitchInitOpts.filterIns.slices = 0
@@ -215,9 +215,9 @@ onMounted(() => {
 })
 
 // RGB Split Effect
-// const rgbSplitOptsRed = [1, 1]
-// const rgbSplitOptsGreen = [-1, -1]
-// const rgbSplitOptsBlue = [0, 0]
+const rgbSplitOptsRed = [1, 1]
+const rgbSplitOptsGreen = [-1, -1]
+const rgbSplitOptsBlue = [0, 0]
 </script>
 
 <template>
@@ -243,6 +243,12 @@ onMounted(() => {
         v-for="i in 2"
         :key="`container_${i}`"
         :x="containerPos[i]">
+        <Graphics @render="(g) => {
+          g.clear()
+          g.beginFill(0x000000, 0.00001)
+          g.drawRect(0, 0, 1500, 700)
+          g.endFill()
+        }" />
         <KvText
           v-for="(item, idx) in texts"
           :key="`text_${idx}`"
