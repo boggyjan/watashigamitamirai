@@ -255,8 +255,8 @@ onMounted(() => {
           :font-size="item.fontSize" />
       </Container>
       <!-- filters begin -->
-      <BlurFilter
-        :blur="1" />
+      <!-- <BlurFilter
+        :blur="1" /> -->
       <ShockwaveFilter
         :center="shockwaveCenter"
         :options="shockwaveOpts"
