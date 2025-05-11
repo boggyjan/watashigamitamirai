@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import KeyVisual from './components/KeyVisual'
 import AudioIcon from './components/AudioIcon'
 import audioData from './constants/audioData'
+import texts from '@/data/texts'
 
 // Audio
 const audio = ref()
@@ -40,15 +41,28 @@ function setMediaSession() {
   }
 }
 
+const webFontLoaded = ref(false)
+
 onMounted(() => {
   setMediaSession()
+
+  document.fonts.ready.then(() => {
+    webFontLoaded.value = true
+  });
 })
 </script>
 
 <template>
-  <KeyVisual />
+  <div
+    v-if="!webFontLoaded"
+    class="loading">
+    読み込み中...
+  </div>
+  <KeyVisual v-else />
 
-  <div class="audio-switch-btn">
+  <div
+    v-if="webFontLoaded"
+    class="audio-switch-btn">
     <div
       class="icon"
       @click="handleAudioSwitch">
@@ -83,6 +97,17 @@ onMounted(() => {
       <feBlend in="red" in2="cyan" mode="screen" result="color-split" />
     </filter>
   </svg>
+
+  <div
+    v-if="!webFontLoaded"
+    class="font-preload">
+    <div
+      v-for="(item, i) in texts"
+      :key="`font-preload_${i}`"
+      :style="`font-weight: ${item.fontWeight}`">
+      {{ item.text }}
+    </div>
+  </div>
 </template>
 
 <style lang="scss">

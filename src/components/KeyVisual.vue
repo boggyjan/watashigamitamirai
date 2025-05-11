@@ -21,15 +21,6 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(duration)
 
-// 讓一開始不要顯示第二個 container
-const containerVisible = ref([null, true, false])
-
-onMounted(() => {
-  setTimeout(() => {
-    containerVisible.value[2] = true
-  }, 4000)
-})
-
 // 控制兩個 container 的 x 軸位置
 const containerPos = ref([null, 0, 1500])
 
@@ -317,8 +308,7 @@ onMounted(() => {
         ref="textContainer"
         v-for="i in 2"
         :key="`container_${i}`"
-        :x="containerPos[i]"
-        :visible="containerVisible[i]">
+        :x="containerPos[i]">
         <Graphics @render="(g) => {
           g.clear()
           g.beginFill(0x000000, 0.00001)
@@ -376,8 +366,9 @@ onMounted(() => {
     </div>
     <div v-else>
       <div class="t3">大災難</div>
-      <div class="t3">発生した…か？</div>
-      <div class="t1 mv-1">…笑えば…いいと思うよ</div>
+      <div class="t3">起きたのか、</div>
+      <div class="t3">それとも…？</div>
+      <div class="t1 mv-1">笑えば、いいと思うよ</div>
     </div>
   </div>
 </template>
