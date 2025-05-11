@@ -21,6 +21,16 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(duration)
 
+// 讓一開始不要顯示第二個 container
+const containerVisible = ref([null, true, false])
+
+onMounted(() => {
+  setTimeout(() => {
+    containerVisible.value[2] = true
+  }, 4000)
+})
+
+// 控制兩個 container 的 x 軸位置
 const containerPos = ref([null, 0, 1500])
 
 function updateContainerPos() {
@@ -32,7 +42,7 @@ onTick((delta) => {
   updateContainerPos()
 })
 
-// countdown text begin
+// 倒數計時文字
 const timeDiff = ref({})
 const pixiWidth = 1500
 const pixiHeight = 700
@@ -60,8 +70,6 @@ onMounted(() => {
     updateTimeDiff()
   }, 1000)
 })
-
-// countdown text end
 
 // ============= Filters =============
 function useFilters() {
@@ -265,21 +273,19 @@ onMounted(() => {
     const clickEvent = new PIXI.FederatedPointerEvent('pointertap')
     clickEvent.global = clickedText.getGlobalPosition()
 
-    const tl = gsap.timeline()
     const xDiff = clickedText.getBounds().width / 2 * 0.05
     const yDiff = clickedText.getBounds().height / 2 * 0.05
 
-    tl.to(clickedText, {
-        pixi: { colorize: '#ffffff', scale: 1.05 },
+    gsap.killTweensOf(clickedText)
+    gsap.to(clickedText, {
+        pixi: { colorize: '#ffffff', colorizeAmount: 1, scale: 1.05 },
         x: clickedText.ox - xDiff,
         y: clickedText.oy - 16 - yDiff,
         duration: 1,
       })
-      .to({}, {
-        duration: 2,
-      })
-      .to(clickedText, {
-        pixi: { colorize: null, scale: 1 },
+    gsap.to(clickedText, {
+        delay: 2,
+        pixi: { colorize: '#ffffff', colorizeAmount: 0, scale: 1 },
         x: clickedText.ox,
         y: clickedText.oy - 16,
         duration: 10,
@@ -311,7 +317,8 @@ onMounted(() => {
         ref="textContainer"
         v-for="i in 2"
         :key="`container_${i}`"
-        :x="containerPos[i]">
+        :x="containerPos[i]"
+        :visible="containerVisible[i]">
         <Graphics @render="(g) => {
           g.clear()
           g.beginFill(0x000000, 0.00001)
