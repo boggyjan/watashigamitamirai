@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+import { Text as _Text2 } from 'pixi.js'
+import * as PIXI from 'pixi.js'
 import { Application, renderer, onTick } from 'vue3-pixi'
 // pixi-filters list https://www.npmjs.com/package/pixi-filters?activeTab=readme
 import {
@@ -218,6 +221,71 @@ onMounted(() => {
 const rgbSplitOptsRed = [1, 1]
 const rgbSplitOptsGreen = [-1, -1]
 const rgbSplitOptsBlue = [0, 0]
+
+// 因為 canvas 使用了 object-fit: cover，因此需自行實作 Text click
+const textContainer = ref(null)
+
+onMounted(() => {
+  const textIns = textContainer.value.flatMap(c => c.children.filter(child => child instanceof _Text2))
+
+  window.addEventListener('click', event => {
+    const containerWidth = window.innerWidth;
+    const containerHeight = window.innerHeight;
+
+    const imageWidth = 1500;
+    const imageHeight = 700;
+
+    // 比例要取「較大」的那個，因為是 cover
+    const scale = Math.max(containerWidth / imageWidth, containerHeight / imageHeight);
+
+    // 圖片實際被放大後的尺寸
+    const displayedWidth = imageWidth * scale;
+    const displayedHeight = imageHeight * scale;
+
+    // 被裁掉的量（上下或左右）
+    const offsetX = (displayedWidth - containerWidth) / 2;
+    const offsetY = (displayedHeight - containerHeight) / 2;
+
+    // 圖片中真實的位置
+    const realX = (event.clientX + offsetX) / scale;
+    const realY = (event.clientY + offsetY) / scale;
+
+    const clickedText = textIns.find(t => {
+      const bound = t.getBounds()
+      return bound.x < realX &&
+        bound.x + bound.width > realX &&
+        bound.y < realY &&
+        bound.y + bound.height > realY
+    })
+
+    if (!clickedText) {
+      return
+    }
+
+    const clickEvent = new PIXI.FederatedPointerEvent('pointertap')
+    clickEvent.global = clickedText.getGlobalPosition()
+
+    const tl = gsap.timeline()
+    const xDiff = clickedText.getBounds().width / 2 * 0.05
+    const yDiff = clickedText.getBounds().height / 2 * 0.05
+
+    tl.to(clickedText, {
+        pixi: { colorize: '#ffffff', scale: 1.05 },
+        x: clickedText.ox - xDiff,
+        y: clickedText.oy - 16 - yDiff,
+        duration: 1,
+      })
+      .to({}, {
+        duration: 2,
+      })
+      .to(clickedText, {
+        pixi: { colorize: null, scale: 1 },
+        x: clickedText.ox,
+        y: clickedText.oy - 16,
+        duration: 10,
+      })
+  })
+})
 </script>
 
 <template>
@@ -240,6 +308,7 @@ const rgbSplitOptsBlue = [0, 0]
     :resolution="1">
     <Container>
       <Container
+        ref="textContainer"
         v-for="i in 2"
         :key="`container_${i}`"
         :x="containerPos[i]">
@@ -253,7 +322,9 @@ const rgbSplitOptsBlue = [0, 0]
           v-for="(item, idx) in texts"
           :key="`text_${idx}`"
           :x="item.x"
+          :ox="item.x"
           :y="item.y"
+          :oy="item.y"
           :width="item.width"
           :align="item.align"
           :text="item.text"

@@ -1,8 +1,6 @@
 <script setup>
-import * as PIXI from 'pixi.js'
 import { ref, defineProps, onMounted } from 'vue'
 import { onTick, useApplication } from 'vue3-pixi'
-import gsap from 'gsap'
 
 const props = defineProps(['x', 'y', 'width', 'text', 'fontSize', 'fontWeight', 'align'])
 const style = ref({
@@ -69,36 +67,14 @@ onTick(() => {
 onMounted(() => {
   setTimeout(showText, getRdnTime({ init: true }))
 })
-
-function handleClick() {
-  const tl = gsap.timeline()
-  const xDiff = textIns.value.getBounds().width / 2 * 0.05
-  const yDiff = textIns.value.getBounds().height / 2 * 0.05
-
-  tl.to(textIns.value, {
-    pixi: { colorize: '#ffffff', scale: 1.05 },
-    x: props.x - xDiff,
-    y: props.y - 16 - yDiff,
-    duration: 1,
-  }).to(textIns.value, {
-    pixi: { colorize: null, scale: 1 },
-    x: props.x,
-    y: props.y - 16,
-    duration: 12,
-  })
-}
 </script>
 
 <template>
   <Text
     ref="textIns"
-    interactive
-    buttonMode
     :x="props.x"
     :y="props.y - 16"
     :text="text"
     :style="style"
-    :visible="visible"
-    eventMode="static"
-    @pointerdown="handleClick" />
+    :visible="visible" />
 </template>
