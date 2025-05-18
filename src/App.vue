@@ -54,7 +54,7 @@ onMounted(() => {
 
 <template>
   <div
-    v-if="!webFontLoaded"
+    v-if="!webFontLoaded || true"
     class="loading">
     読み込み中...
   </div>
